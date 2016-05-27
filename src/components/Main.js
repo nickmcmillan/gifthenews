@@ -3,6 +3,8 @@ require('styles/App.scss');
 
 import React from 'react';
 import Card from '../components/Card/Card'
+import keywordFinder from './keyword-finder'
+
 
 var $ = require('jquery');
 var yqlApi = 'https://query.yahooapis.com/v1/public/yql';
@@ -54,7 +56,7 @@ class AppComponent extends React.Component {
       });
 
       This.getNextItem();
-      
+
     }, 'jsonp');
   }
 
@@ -62,26 +64,27 @@ class AppComponent extends React.Component {
     var This = this;
 
     // console.log('currentIndex: ' + This.state.currentIndex);
-    
+
     This.getGiphyImage(this.state.feeds[this.state.currentIndex], function(item) {
-      
-      
+
+
         This.setState({
           // nextItem: item
           currentItem: item,
           currentIndex: This.state.currentIndex + 1,
           delay: delay
         });
-      
-      
+
+
       This.getNextItem();
-      
+
     });
   }
 
   getGiphyImage(item, callback) {
     var This = this;
-    var tag = item.title;
+    var tag = keywordFinder(item.description)[0].word;
+
     var url = giphyApi + 'random?api_key=dc6zaTOxFJmzC&tag=' + tag;
 
     $.getJSON(url, function(res) {
