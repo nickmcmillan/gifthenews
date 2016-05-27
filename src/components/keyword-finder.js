@@ -2,6 +2,7 @@
 // short, common words to skip when counting
 // MUST be lowercase
 const stopWords = [
+	'',
 	'1',
   '2',
   '3',
@@ -120,12 +121,16 @@ const stopWords = [
   'any',
   'youll',
   'youre',
+	'san',
+	'new',
   'also',
   'than',
   'those',
   'though',
   'thing',
-  'things'
+  'things',
+	'video',
+	'reuters'
 ]
 
 export default function keywordFinder(string) {
