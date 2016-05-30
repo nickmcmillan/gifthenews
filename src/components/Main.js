@@ -8,8 +8,8 @@ import stripHTML from './strip-html'
 
 
 var $ = require('jquery');
-var yqlApi = 'https://query.yahooapis.com/v1/public/yql';
-var feed = 'http://feeds.reuters.com/reuters/technologyNews';
+var reutersFeed = 'http://feeds.reuters.com/reuters/technologyNews';
+let reutersCount;
 
 const delay = 10000;
 
@@ -41,23 +41,31 @@ class AppComponent extends React.Component {
 
   componentDidMount() {
 
-    var yql = yqlApi + '?q=' + encodeURIComponent('select title, description from rss where url=\'' + feed + '\'') + '&format=json&diagnostics=true&callback=';
-    //console.log(yql);
+    let xhr = new XMLHttpRequest();
 
-    var This = this;
+    // use an arrow function to preserve the state of 'this' as the component
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let data = JSON.parse(xhr.responseText);
 
-    $.getJSON(yql, function(res) {
-      // console.log('got feed');
+            if (data.status === 'ok') {
+              //console.log(JSON.parse(xhr.responseText).items);
 
-      This.setState({
-        feeds: res.query.results.item
+              reutersCount = JSON.parse(xhr.responseText).items.length
 
-      });
+              this.setState({
+                feeds: JSON.parse(xhr.responseText).items
+              });
 
+              this.getNextItem();
 
-      This.getNextItem();
+            }
+        }
+    };
 
-    }, 'jsonp');
+    xhr.open('GET',`http://rss2json.com/api.json?rss_url=${encodeURIComponent(reutersFeed)}`,true);
+    xhr.send();
+
   }
 
   getNextItem() {
@@ -76,7 +84,14 @@ class AppComponent extends React.Component {
         });
 
 
-      This.getNextItem();
+        // reached the end of the news feed, restart from the beginning
+        if (This.state.currentIndex === reutersCount) {
+          This.setState({
+            currentIndex: 0
+          })
+        }
+
+        This.getNextItem();
 
     });
   }
@@ -115,7 +130,7 @@ class AppComponent extends React.Component {
         return;
       }
 
-      console.log(res.data[0].images);
+      //console.log(res.data[0].images);
       item.gif = res.data[0].images.original.mp4;
 
       // console.log('loading image for: ' + item.title);
