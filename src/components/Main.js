@@ -131,7 +131,6 @@ class AppComponent extends React.Component {
 
             if (res.meta.msg === 'OK') {
 
-
               //console.log(JSON.parse(xhr.responseText).items);
 
               //articleCount = JSON.parse(xhr.responseText).items.length
@@ -148,7 +147,7 @@ class AppComponent extends React.Component {
 
               setTimeout(function() {
 
-                  callback(item);
+                callback(item);
 
               }, This.state.delay);
 
@@ -183,12 +182,6 @@ class AppComponent extends React.Component {
             title={this.state.currentItem.title}
             summary={ stripHTML(this.state.currentItem.description) }
             gif={this.state.currentItem.gif}
-          />
-          <Card
-            className="card card--next"
-            title={this.state.nextItem.title}
-            summary={ stripHTML(this.state.nextItem.description) }
-            gif={this.state.nextItem.gif}
           />
         </div>
       );

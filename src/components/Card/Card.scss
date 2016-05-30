@@ -1,3 +1,21 @@
+@mixin textblock($fatness: 0.1em, $overhang: 0.2em, $color: #fff) {
+    display: inline;
+    box-shadow: $overhang 0 0 $color, -$overhang 0 0 $color;
+    background-color: $color;
+}
+
+
+body {
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+.giphy-logo {
+  position: fixed;
+  bottom: 3vmin;
+  right: 3vmin;
+  max-width: 140px;
+}
+
 .card {
   // height: 100%;
   position: absolute;
@@ -13,7 +31,9 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  overflow: hidden;
 }
+
 .card--current {
 
 }
@@ -26,37 +46,38 @@
   height: 100%;
   z-index: -1;
 }
-.card--next {
-  transform: translate3d(100%, 0, 0);
+.card__h1 {
+  margin: 0;
+  padding: 0;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 8vmin;
+  color: #000;
+  @include textblock(0.5em, 15px, transparentize(#fff, 0.1));
+  background-color: transparentize(#fff, 0.1);
 }
-  .card__content {
+
+.card__summary-wrapper {
+  margin-top: 1vmin;
+}
+
+.card__summary {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 5vmin;
+  margin: 0;
+
+  color: #fff;
+  @include textblock(0.5em, 15px, transparentize(#1a1a1a, 0.15));
+  background-color: transparentize(#1a1a1a, 0.15);
+}
+
+.card__h1,
+.card__summary {
+  span {
+    display: inline;
+    white-space: pre-wrap;
+    padding: 5px;
+    padding-left: 0px;
   }
-  .card__h1 {
-    margin: 0;
-    padding: 0;
-    font-family: "museo-sans-condensed",sans-serif;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 6em;
-    line-height: normal;
-  }
-  .card__summary {
-    font-family: "museo-sans-condensed",sans-serif;
-    font-style: normal;
-    font-weight: 300;
-    font-size: 3em;
-    line-height: 1.25;
-    margin: 1em 0 0;
-  }
-  .card__h1,
-  .card__summary {
-    span {
-      background-color: #222;
-      color: #fff;
-      display: inline;
-      white-space: pre-wrap;
-      padding: 5px;
-      padding-left: 0px;
-      box-shadow: -16px 0 0 #222;
-    }
-  }
+}
