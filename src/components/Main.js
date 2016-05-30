@@ -9,10 +9,7 @@ import stripHTML from './strip-html'
 
 var $ = require('jquery');
 var yqlApi = 'https://query.yahooapis.com/v1/public/yql';
-// var feed = 'http://au.rss.news.yahoo.com/technology.xml';
 var feed = 'http://feeds.reuters.com/reuters/technologyNews';
-
-var giphyApi = 'http://api.giphy.com/v1/gifs/';
 
 const delay = 10000;
 
@@ -86,30 +83,40 @@ class AppComponent extends React.Component {
 
   getGiphyImage(item, callback, forcedTag) {
 
+    var giphyApi = 'http://api.giphy.com/v1/gifs/';
+
     var This = this;
+    let url;
+    let tag;
+    let tag2;
 
     if (forcedTag) {
-      var tag = forcedTag
+      url = giphyApi + 'random?api_key=dc6zaTOxFJmzC&tag=' + forcedTag;
+
     } else {
+      let strippedTitle = stripHTML(item.title)
       let strippedDescription = stripHTML(item.description)
-      var tag = keywordFinder(strippedDescription)[0].word
+      tag = keywordFinder(strippedTitle + strippedDescription)[0].word
+      tag2 = keywordFinder(strippedTitle + strippedDescription)[1].word
+
+      //console.log(strippedTitle + strippedDescription);
+
+      url = giphyApi + 'search?api_key=dc6zaTOxFJmzC&limit=1&q=' + tag + '+' + tag2
     }
 
-    console.log('giphy tag used:', tag)
-    var url = giphyApi + 'random?api_key=dc6zaTOxFJmzC&tag=' + tag;
+    console.log(`${tag}, ${tag2}`);
 
     $.getJSON(url, function(res) {
 
-      // if giphy didn't come through with any goods, like a real obscure keyword
+      // if giphy didn't come through with any goods, like a real obscure keyword:
       if (Array.isArray(res.data) && !res.data.length) {
         console.log('nothing found:', tag, 'using cats instead')
         This.getGiphyImage(item, callback, 'cats')
         return;
       }
 
-      // console.log('got giphy');
-      // console.log(res);
-      item.gif = res.data.image_url;
+      console.log(res.data[0].images);
+      item.gif = res.data[0].images.original.mp4;
 
       // console.log('loading image for: ' + item.title);
       var image = new Image();

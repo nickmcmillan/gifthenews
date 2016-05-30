@@ -17,10 +17,19 @@
 .card--current {
 
 }
+.card__video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  object-fit: cover;
+  height: 100%;
+  z-index: -1;
+}
 .card--next {
   transform: translate3d(100%, 0, 0);
 }
-  .card__content {    
+  .card__content {
   }
   .card__h1 {
     margin: 0;
