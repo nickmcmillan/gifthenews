@@ -147,9 +147,10 @@ export default function keywordFinder(string) {
     const result = Object.keys(wordOccurrences).reduce(function(arr, currentWord) {
 
         const containsAStopWord = (stopWords.indexOf(currentWord) > -1);
+				const containsANumber = parseFloat(currentWord)==currentWord;
 
 				// only add the word if its not a stopword
-        if (!containsAStopWord) {
+        if (!containsAStopWord && !containsANumber) {
 
           for (let i = 0; i < wordsArray.length; i++) {
 
