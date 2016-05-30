@@ -7,11 +7,10 @@ import keywordFinder from './keyword-finder'
 import stripHTML from './strip-html'
 
 
-var $ = require('jquery');
 var reutersFeed = 'http://feeds.reuters.com/reuters/technologyNews';
-let reutersCount;
+let articleCount;
 
-const delay = 10000;
+const delay = 8000;
 
 // var feeds = require('../sources/Feeds');
 // console.log(feeds);
@@ -51,7 +50,7 @@ class AppComponent extends React.Component {
             if (data.status === 'ok') {
               //console.log(JSON.parse(xhr.responseText).items);
 
-              reutersCount = JSON.parse(xhr.responseText).items.length
+              articleCount = JSON.parse(xhr.responseText).items.length
 
               this.setState({
                 feeds: JSON.parse(xhr.responseText).items
@@ -63,7 +62,7 @@ class AppComponent extends React.Component {
         }
     };
 
-    xhr.open('GET',`http://rss2json.com/api.json?rss_url=${encodeURIComponent(reutersFeed)}`,true);
+    xhr.open('GET',`http://rss2json.com/api.json?rss_url=${encodeURIComponent(reutersFeed)}`, true);
     xhr.send();
 
   }
@@ -71,13 +70,13 @@ class AppComponent extends React.Component {
   getNextItem() {
     var This = this;
 
-     //console.log('currentIndex: ' + This.state.currentIndex);
+    //console.log('currentIndex: ' + This.state.currentIndex);
 
     This.getGiphyImage(this.state.feeds[this.state.currentIndex], function(item) {
 
 
         This.setState({
-          // nextItem: item
+          //nextItem: This.state.feeds[This.state.currentIndex + 1],
           currentItem: item,
           currentIndex: This.state.currentIndex + 1,
           delay: delay
@@ -85,7 +84,7 @@ class AppComponent extends React.Component {
 
 
         // reached the end of the news feed, restart from the beginning
-        if (This.state.currentIndex === reutersCount) {
+        if (This.state.currentIndex === articleCount) {
           This.setState({
             currentIndex: 0
           })
@@ -111,8 +110,8 @@ class AppComponent extends React.Component {
     } else {
       let strippedTitle = stripHTML(item.title)
       let strippedDescription = stripHTML(item.description)
-      tag = keywordFinder(strippedTitle + strippedDescription)[0].word
-      tag2 = keywordFinder(strippedTitle + strippedDescription)[1].word
+      tag = keywordFinder(strippedTitle + strippedDescription)[0].word // the most used word
+      tag2 = keywordFinder(strippedTitle + strippedDescription)[1].word // the second most used word
 
       //console.log(strippedTitle + strippedDescription);
 
@@ -121,28 +120,45 @@ class AppComponent extends React.Component {
 
     console.log(`${tag}, ${tag2}`);
 
-    $.getJSON(url, function(res) {
 
-      // if giphy didn't come through with any goods, like a real obscure keyword:
-      if (Array.isArray(res.data) && !res.data.length) {
-        console.log('nothing found:', tag, 'using cats instead')
-        This.getGiphyImage(item, callback, 'cats')
-        return;
-      }
+    let xhr = new XMLHttpRequest();
 
-      //console.log(res.data[0].images);
-      item.gif = res.data[0].images.original.mp4;
+    // use an arrow function to preserve the state of 'this' as the component
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let res = JSON.parse(xhr.responseText)
+            let data = res.data[0];
 
-      // console.log('loading image for: ' + item.title);
-      var image = new Image();
-      image.src = item.gif;
-      setTimeout(function() {
+            if (res.meta.msg === 'OK') {
 
-          callback(item);
 
-      },
-      This.state.delay);
-    }, 'jsonp')
+              //console.log(JSON.parse(xhr.responseText).items);
+
+              //articleCount = JSON.parse(xhr.responseText).items.length
+
+              // if giphy didn't come through with any goods:
+              if (Array.isArray(data) && !data.length) {
+                console.log('nothing found:', tag, 'using cats instead')
+                This.getGiphyImage(item, callback, 'cats')
+                return;
+              }
+
+              //console.log(data[0].images.original.mp4);
+              item.gif = data.images.original.mp4;
+
+              setTimeout(function() {
+
+                  callback(item);
+
+              }, This.state.delay);
+
+            }
+        }
+    };
+
+    xhr.open('GET', url, true);
+    xhr.send();
+
   }
 
   render() {
