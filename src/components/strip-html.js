@@ -1,4 +1,4 @@
-// do it using regex, not createElement (below), otherwise it renders dom elements within the feed, and those can cause unwanted network requests
+// do it using regex, not createElement (below), otherwise it renders dom elements and those can cause unwanted network requests
 export default function stripHTML(html) {
   if (html) {
     return html.replace(/<(?:.|\n)*?>/gm, '').trim();

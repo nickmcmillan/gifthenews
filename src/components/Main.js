@@ -22,182 +22,176 @@ const reloadAfter = 100 * 60 * 60; // 1 hour
 
 class AppComponent extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      feeds: [],
-      delay: 0,
-      currentIndex: 0,
-      currentItem: {
-        title: '',
-        summary: '',
-        gif: ''
-      },
-      nextItem: {
-        title: '',
-        summary: '',
-        gif: ''
-      }
-    };
-  }
+	constructor(props) {
+		super(props);
+		this.state = {
+			feeds: [],
+			delay: 0,
+			currentIndex: 0,
+			currentItem: {
+				title: '',
+				summary: '',
+				gif: ''
+			}
 
-  componentDidMount() {
+		};
+	}
 
-    let xhr = new XMLHttpRequest();
+	componentDidMount() {
 
-    // use an arrow function to preserve the state of 'this' as the component
-    xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            let data = JSON.parse(xhr.responseText);
+		let xhr = new XMLHttpRequest();
 
-            if (data.status === 'ok') {
-              //console.log(JSON.parse(xhr.responseText).items);
+		// use an arrow function to preserve the state of 'this' as the component
+		xhr.onreadystatechange = () => {
+			if (xhr.readyState === 4 && xhr.status === 200) {
+				let data = JSON.parse(xhr.responseText);
 
-              articleCount = JSON.parse(xhr.responseText).items.length
+				if (data.status === 'ok') {
+					//console.log(JSON.parse(xhr.responseText).items);
 
-              this.setState({
-                feeds: JSON.parse(xhr.responseText).items
-              });
+					articleCount = JSON.parse(xhr.responseText).items.length
 
-              this.getNextItem();
+					this.setState({
+						feeds: JSON.parse(xhr.responseText).items
+					});
 
-            }
-        }
-    };
+					this.getNextItem();
 
-    xhr.open('GET',`http://rss2json.com/api.json?rss_url=${encodeURIComponent(reutersFeed)}`, true);
-    xhr.send();
+				}
+			}
+		};
 
-    // keep it freshhhh
-    setTimeout(()=> {
-      location.reload()
-    }, reloadAfter)
+		xhr.open('GET',`http://rss2json.com/api.json?rss_url=${encodeURIComponent(reutersFeed)}`, true);
+		xhr.send();
 
-  }
+		// keep it freshhhh
+		setTimeout(()=> {
+			location.reload()
+		}, reloadAfter)
 
-  getNextItem() {
-    var This = this;
+	}
 
-    //console.log('currentIndex: ' + This.state.currentIndex);
+	getNextItem() {
+		var This = this;
 
-    This.getGiphyImage(this.state.feeds[this.state.currentIndex], function(item) {
+		//console.log('currentIndex: ' + This.state.currentIndex);
+
+		This.getGiphyImage(this.state.feeds[this.state.currentIndex], function(item) {
 
 
-        This.setState({
-          //nextItem: This.state.feeds[This.state.currentIndex + 1],
-          currentItem: item,
-          currentIndex: This.state.currentIndex + 1,
-          delay: delay
-        });
+			This.setState({
+				currentItem: item,
+				currentIndex: This.state.currentIndex + 1,
+				delay: delay
+			});
 
 
-        // reached the end of the news feed, restart from the beginning
-        if (This.state.currentIndex === articleCount) {
-          This.setState({
-            currentIndex: 0
-          })
-        }
+			// reached the end of the news feed, restart from the beginning
+			if (This.state.currentIndex === articleCount) {
+				This.setState({
+					currentIndex: 0
+				})
+			}
 
-        This.getNextItem();
+			This.getNextItem();
 
-    });
-  }
+		});
+	}
 
-  getGiphyImage(item, callback, forcedTag) {
+	getGiphyImage(item, callback, forcedTag) {
 
-    var giphyApi = 'http://api.giphy.com/v1/gifs/';
+		var giphyApi = 'http://api.giphy.com/v1/gifs/';
 
-    var This = this;
-    let url;
-    let tag;
-    let tag2;
+		var This = this;
+		let url;
+		let tag;
+		let tag2;
 
-    if (forcedTag) {
-      url = giphyApi + 'random?api_key=dc6zaTOxFJmzC&tag=' + forcedTag;
+		if (forcedTag) {
+			url = giphyApi + 'random?api_key=dc6zaTOxFJmzC&tag=' + forcedTag;
 
-    } else {
-      let strippedTitle = stripHTML(item.title)
-      let strippedDescription = stripHTML(item.description)
-      tag = keywordFinder(strippedTitle + strippedDescription)[0].word // the most used word
-      tag2 = keywordFinder(strippedTitle + strippedDescription)[1].word // the second most used word
+		} else {
+			let strippedTitle = stripHTML(item.title)
+			let strippedDescription = stripHTML(item.description)
+			tag = keywordFinder(strippedTitle + strippedDescription)[0].word // the most used word
+			tag2 = keywordFinder(strippedTitle + strippedDescription)[1].word // the second most used word
 
-      url = giphyApi + 'search?api_key=dc6zaTOxFJmzC&limit=1&q=' + tag + '+' + tag2
-    }
+			url = giphyApi + 'search?api_key=dc6zaTOxFJmzC&limit=1&rating=pg-13&q=' + tag + '+' + tag2
+		}
 
-    console.log(`${tag}, ${tag2}`);
+		console.log(`${tag}, ${tag2}`);
 
 
-    let xhr = new XMLHttpRequest();
+		let xhr = new XMLHttpRequest();
 
-    // use an arrow function to preserve the state of 'this' as the component
-    xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            let res = JSON.parse(xhr.responseText)
-            let data = res.data[0];
+		// use an arrow function to preserve the state of 'this' as the component
+		xhr.onreadystatechange = () => {
+			if (xhr.readyState === 4 && xhr.status === 200) {
+				let res = JSON.parse(xhr.responseText)
+				let data = res.data[0];
 
-            if (res.meta.msg === 'OK') {
+				if (res.meta.msg === 'OK') {
 
-              //console.log(JSON.parse(xhr.responseText).items);
+					//console.log(JSON.parse(xhr.responseText).items);
 
-              //articleCount = JSON.parse(xhr.responseText).items.length
+					//articleCount = JSON.parse(xhr.responseText).items.length
 
-              // if giphy didn't come through with any goods:
-              if (Array.isArray(data) && !data.length) {
-                console.log('nothing found:', tag, 'using cats instead')
-                This.getGiphyImage(item, callback, 'cats')
-                return;
-              }
+					// if giphy didn't come through with any goods:
+					if (Array.isArray(data) && !data.length) {
+						console.log('nothing found:', tag, 'using cats instead')
+						This.getGiphyImage(item, callback, 'cats')
+						return;
+					}
 
-              //console.log(data[0].images.original.mp4);
-              item.gif = data.images.original.mp4;
+					//console.log(data[0].images.original.mp4);
+					item.gif = data.images.original.mp4;
 
-              setTimeout(function() {
+					setTimeout(function() {
 
-                callback(item);
+						callback(item);
 
-              }, This.state.delay);
+					}, This.state.delay);
 
-            }
-        }
-    };
+				}
+			}
+		};
 
-    xhr.open('GET', url, true);
-    xhr.send();
+		xhr.open('GET', url, true);
+		xhr.send();
 
-  }
+	}
 
-  render() {
+	render() {
 
 
 
-    // if no gifs are in state yet, render a loader instead
-    if (this.state.currentItem.gif === '') {
+		// if no gifs are in state yet, render a loader instead
+		if (this.state.currentItem.gif === '') {
 
-      return (
-        <div className="cards">
-          <Card
-            className="card"
-            title='Hang tight'
-          />
-        </div>
-      );
+			return (
+				<div className="cards">
+				<Card
+				className="card"
+				title='Hang tight'
+				/>
+				</div>
+			);
 
-    } else {
+		} else {
 
-      return (
+			return (
+				<Card
+				currentIndex={this.state.currentIndex}
+				className="card"
+				title={this.state.currentItem.title}
+				summary={ stripHTML(this.state.currentItem.description) }
+				gif={this.state.currentItem.gif}
+				/>
+			);
+		}
 
-          <Card
-            currentIndex={this.state.currentIndex}
-            className="card"
-            title={this.state.currentItem.title}
-            summary={ stripHTML(this.state.currentItem.description) }
-            gif={this.state.currentItem.gif}
-          />
-      );
-    }
 
-
-  }
+	}
 }
 
 // AppComponent.defaultProps = {
