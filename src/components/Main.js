@@ -5,8 +5,7 @@ import React from 'react';
 import Card from '../components/Card/Card'
 import keywordFinder from './keyword-finder'
 import stripHTML from './strip-html'
-
-var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
+import stripUntilDash from './strip-until-dash'
 
 
 var reutersFeed = 'http://feeds.reuters.com/reuters/technologyNews';
@@ -113,8 +112,9 @@ class AppComponent extends React.Component {
 		} else {
 			let strippedTitle = stripHTML(item.title)
 			let strippedDescription = stripHTML(item.description)
-			tag = keywordFinder(strippedTitle + strippedDescription)[0].word // the most used word
-			tag2 = keywordFinder(strippedTitle + strippedDescription)[1].word // the second most used word
+			let dashedDescription = stripUntilDash(strippedDescription)
+			tag = keywordFinder(strippedTitle + dashedDescription)[0].word // the most used word
+			tag2 = keywordFinder(strippedTitle + dashedDescription)[1].word // the second most used word
 
 			url = giphyApi + 'search?api_key=dc6zaTOxFJmzC&limit=1&rating=pg-13&q=' + tag + '+' + tag2
 		}
@@ -162,9 +162,6 @@ class AppComponent extends React.Component {
 	}
 
 	render() {
-
-
-
 		// if no gifs are in state yet, render a loader instead
 		if (this.state.currentItem.gif === '') {
 
@@ -184,13 +181,11 @@ class AppComponent extends React.Component {
 				currentIndex={this.state.currentIndex}
 				className="card"
 				title={this.state.currentItem.title}
-				summary={ stripHTML(this.state.currentItem.description) }
+				summary={ stripUntilDash( stripHTML(this.state.currentItem.description)) }
 				gif={this.state.currentItem.gif}
 				/>
 			);
 		}
-
-
 	}
 }
 

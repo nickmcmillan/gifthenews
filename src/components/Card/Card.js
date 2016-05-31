@@ -16,7 +16,7 @@ class Card extends React.Component {
 
 		return (
 		  <div>
-		    <ReactCSSTransitionGroup transitionName="content" transitionAppear={true} transitionAppearTimeout={100} transitionEnterTimeout={100} transitionLeaveTimeout={1000} >
+		    <ReactCSSTransitionGroup transitionName="content" transitionAppear={true} transitionAppearTimeout={1000} transitionEnterTimeout={100} transitionLeaveTimeout={1000} >
 		      <div className={this.props.className} key={key}>
 		        <div className="card__content">
 		          <div className="card__h1-wrapper">
@@ -30,7 +30,7 @@ class Card extends React.Component {
 
 		      </div>
 		    </ReactCSSTransitionGroup>
-		    <ReactCSSTransitionGroup transitionName="video" transitionEnterTimeout={100} transitionAppearTimeout={100} transitionLeaveTimeout={1000} >
+		    <ReactCSSTransitionGroup transitionName="video" transitionEnterTimeout={1000} transitionLeaveTimeout={1000} >
 		      <video className="card__video" src={this.props.gif} loop autoPlay key={key}></video>
 		    </ReactCSSTransitionGroup>
 		  </div>
