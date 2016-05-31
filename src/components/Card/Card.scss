@@ -1,3 +1,6 @@
+$timing: 600ms;
+$ease: cubic-bezier(0.72,-0.39, 0, 1.07);
+
 @mixin textblock($fatness: 0.1em, $overhang: 0.2em, $color: #fff) {
     display: inline;
     box-shadow: $overhang 0 0 $color, -$overhang 0 0 $color;
@@ -7,6 +10,8 @@
 
 body {
   font-family: 'Roboto Condensed', sans-serif;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .giphy-logo {
@@ -32,11 +37,10 @@ body {
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
+
+  transition: opacity $timing ease-in;
 }
 
-.card--current {
-
-}
 .card__video {
   position: absolute;
   top: 0;
@@ -46,6 +50,7 @@ body {
   height: 100%;
   z-index: -1;
 }
+
 .card__h1 {
   margin: 0;
   padding: 0;
@@ -57,8 +62,14 @@ body {
   background-color: transparentize(#fff, 0.1);
 }
 
+.card__h1-wrapper,
 .card__summary-wrapper {
-  margin-top: 1vmin;
+  transition: all $timing;
+}
+
+.card__summary-wrapper {
+  margin-top: 2vmin;
+  transition-delay: 100ms;
 }
 
 .card__summary {
@@ -80,4 +91,43 @@ body {
     padding: 5px;
     padding-left: 0px;
   }
+}
+
+
+.content-appear {
+  opacity: 0.01;
+}
+
+.content-appear-active {
+  opacity: 1;
+}
+
+.content-enter {
+  opacity: 0.01;
+
+  .card__h1-wrapper,
+  .card__summary-wrapper {
+    transform: translate3d(30%, 0, 0);
+
+
+  }
+}
+
+.content-enter-active {
+  opacity: 1;
+}
+
+.content-leave {
+  opacity: 0.01;
+
+  .card__h1-wrapper,
+  .card__summary-wrapper {
+    transform: translate3d(-100%, 0, 0);
+    transition-timing-function: $ease;
+  }
+
+}
+
+.content-leave-active {
+  opacity: 0.01;
 }

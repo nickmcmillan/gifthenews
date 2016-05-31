@@ -6,11 +6,14 @@ import Card from '../components/Card/Card'
 import keywordFinder from './keyword-finder'
 import stripHTML from './strip-html'
 
+var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
+
 
 var reutersFeed = 'http://feeds.reuters.com/reuters/technologyNews';
 let articleCount;
 
 const delay = 8000;
+const reloadAfter = 100 * 60 * 60; // 1 hour
 
 // var feeds = require('../sources/Feeds');
 // console.log(feeds);
@@ -65,6 +68,11 @@ class AppComponent extends React.Component {
     xhr.open('GET',`http://rss2json.com/api.json?rss_url=${encodeURIComponent(reutersFeed)}`, true);
     xhr.send();
 
+    // keep it freshhhh
+    setTimeout(()=> {
+      location.reload()
+    }, reloadAfter)
+
   }
 
   getNextItem() {
@@ -113,8 +121,6 @@ class AppComponent extends React.Component {
       tag = keywordFinder(strippedTitle + strippedDescription)[0].word // the most used word
       tag2 = keywordFinder(strippedTitle + strippedDescription)[1].word // the second most used word
 
-      //console.log(strippedTitle + strippedDescription);
-
       url = giphyApi + 'search?api_key=dc6zaTOxFJmzC&limit=1&q=' + tag + '+' + tag2
     }
 
@@ -162,28 +168,31 @@ class AppComponent extends React.Component {
 
   render() {
 
+
+
     // if no gifs are in state yet, render a loader instead
     if (this.state.currentItem.gif === '') {
 
       return (
         <div className="cards">
           <Card
-            className="card card--current"
+            className="card"
             title='Hang tight'
           />
         </div>
       );
 
     } else {
+
       return (
-        <div className="cards">
+
           <Card
-            className="card card--current"
+            currentIndex={this.state.currentIndex}
+            className="card"
             title={this.state.currentItem.title}
             summary={ stripHTML(this.state.currentItem.description) }
             gif={this.state.currentItem.gif}
           />
-        </div>
       );
     }
 
