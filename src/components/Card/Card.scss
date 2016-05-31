@@ -8,19 +8,6 @@ $ease: cubic-bezier(0.72,-0.39, 0, 1.07);
 }
 
 
-body {
-  font-family: 'Roboto Condensed', sans-serif;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-.giphy-logo {
-  position: fixed;
-  bottom: 3vmin;
-  right: 3vmin;
-  max-width: 140px;
-}
-
 .card {
   // height: 100%;
   position: absolute;
