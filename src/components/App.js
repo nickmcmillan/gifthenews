@@ -3,23 +3,19 @@ require('styles/App.scss');
 
 import React from 'react';
 import Card from '../components/Card/Card'
+
 import keywordFinder from './keyword-finder'
 import stripHTML from './strip-html'
 import stripUntilDash from './strip-until-dash'
 
 
-var reutersFeed = 'http://feeds.reuters.com/reuters/technologyNews';
+let reutersFeed = 'http://feeds.reuters.com/reuters/technologyNews';
 let articleCount;
-
-const delay = 8000;
+const delay = 15000;
 const reloadAfter = 100 * 60 * 60; // 1 hour
 
-// var feeds = require('../sources/Feeds');
-// console.log(feeds);
 
-// let yeomanImage = require('../images/yeoman.png');
-
-class AppComponent extends React.Component {
+class App extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -38,6 +34,8 @@ class AppComponent extends React.Component {
 
 	componentDidMount() {
 
+
+		// get the news feed
 		let xhr = new XMLHttpRequest();
 
 		// use an arrow function to preserve the state of 'this' as the component
@@ -105,6 +103,7 @@ class AppComponent extends React.Component {
 		let url;
 		let tag;
 		let tag2;
+		let tag3;
 
 		if (forcedTag) {
 			url = giphyApi + 'random?api_key=dc6zaTOxFJmzC&tag=' + forcedTag;
@@ -113,13 +112,13 @@ class AppComponent extends React.Component {
 			let strippedTitle = stripHTML(item.title)
 			let strippedDescription = stripHTML(item.description)
 			let dashedDescription = stripUntilDash(strippedDescription)
-			tag = keywordFinder(strippedTitle + dashedDescription)[0].word // the most used word
-			tag2 = keywordFinder(strippedTitle + dashedDescription)[1].word // the second most used word
+			tag = keywordFinder(strippedTitle + ' ' + dashedDescription)[0] // the most used word
+			tag2 = keywordFinder(strippedTitle + ' ' + dashedDescription)[1] // the second most used word
+			tag3 = keywordFinder(strippedTitle + ' ' + dashedDescription)[2] // the second most used word
 
-			url = giphyApi + 'search?api_key=dc6zaTOxFJmzC&limit=1&rating=pg-13&q=' + tag + '+' + tag2
+			url = giphyApi + 'search?api_key=dc6zaTOxFJmzC&limit=1&rating=pg-13&q=' + tag + '+' + tag2 + '+' + tag3
+			console.log(keywordFinder(strippedTitle + ' ' + dashedDescription));
 		}
-
-		console.log(`${tag}, ${tag2}`);
 
 
 		let xhr = new XMLHttpRequest();
@@ -143,7 +142,6 @@ class AppComponent extends React.Component {
 						return;
 					}
 
-					//console.log(data[0].images.original.mp4);
 					item.gif = data.images.original.mp4;
 
 					setTimeout(function() {
@@ -177,20 +175,19 @@ class AppComponent extends React.Component {
 		} else {
 
 			return (
-				<Card
-				currentIndex={this.state.currentIndex}
-				className="card"
-				title={this.state.currentItem.title}
-				summary={ stripUntilDash( stripHTML(this.state.currentItem.description)) }
-				gif={this.state.currentItem.gif}
-				/>
+				<div>
+					<Card
+					currentIndex={this.state.currentIndex}
+					className="card"
+					title={this.state.currentItem.title}
+					summary={ stripUntilDash( stripHTML(this.state.currentItem.description)) }
+					gif={this.state.currentItem.gif}
+					/>
+					<img className='giphy-logo' src='images/giphy.png' alt='Powered by Giphy logo' / >
+				</div>
 			);
 		}
 	}
 }
 
-// AppComponent.defaultProps = {
-//   feeds: []
-// };
-
-export default AppComponent;
+export default App;

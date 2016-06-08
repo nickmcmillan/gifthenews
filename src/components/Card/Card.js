@@ -1,6 +1,6 @@
 require('components/Card/Card.scss');
-
 import React from 'react'
+
 var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 
 
