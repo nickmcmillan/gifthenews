@@ -1,18 +1,12 @@
-require('components/Card/Card.scss');
 import React from 'react'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+import './Card.scss'
 
-var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
-
-
-class Card extends React.Component {
-
-  constructor(props) {
-	  super(props);
-  }
+export default class Card extends React.Component {
 
   render() {
 
-	  let key = this.props.currentIndex
+	  let key = this.props.index
 
 		return (
 		  <div>
@@ -23,7 +17,7 @@ class Card extends React.Component {
 		            <h1 className="card__h1">{this.props.title}</h1>
 		          </div>
 		          <div className="card__summary-wrapper">
-		            <p className="card__summary">{this.props.summary}</p>
+		            <p className="card__summary">{this.props.description}</p>
 		          </div>
 		        </div>
 
@@ -33,9 +27,19 @@ class Card extends React.Component {
 		    <ReactCSSTransitionGroup transitionName="video" transitionEnterTimeout={1000} transitionLeaveTimeout={1000} >
 		      <video className="card__video" src={this.props.gif} loop autoPlay key={key}></video>
 		    </ReactCSSTransitionGroup>
+
+			<div className={'debug ' + (this.props.debug ? 'show' : 'hide')}>
+				<p>Keywords:</p>
+				<ul>
+					{this.props.keywords.map(function(value) {
+						return <li key={value}>{value}</li>
+					})}
+				</ul>
+				<p>Giphy filter: {this.props.rating} <br/> Use query string to set - eg '/?rating=pg-13'</p>
+			</div>
+
+
 		  </div>
 	  	);
 	}
 }
-
-export default Card;

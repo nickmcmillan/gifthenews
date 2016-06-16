@@ -1,32 +1,42 @@
-'use strict';
+var path = require('path');
+var webpack = require('webpack');
+var precss       = require('precss');
+var autoprefixer = require('autoprefixer');
+var postcssmixins = require('postcss-mixins');
+var postcssColorAlpha = require('postcss-color-alpha');
+var stripInlineComments = require('postcss-strip-inline-comments');
 
-const path = require('path');
-const args = require('minimist')(process.argv.slice(2));
-
-// List of allowed environments
-const allowedEnvs = ['dev', 'dist', 'test'];
-
-// Set the correct environment
-let env;
-if (args._.length > 0 && args._.indexOf('start') !== -1) {
-  env = 'test';
-} else if (args.env) {
-  env = args.env;
-} else {
-  env = 'dev';
-}
-process.env.REACT_WEBPACK_ENV = env;
-
-/**
- * Build the webpack configuration
- * @param  {String} wantedEnv The wanted environment
- * @return {Object} Webpack config
- */
-function buildConfig(wantedEnv) {
-  let isValid = wantedEnv && wantedEnv.length > 0 && allowedEnvs.indexOf(wantedEnv) !== -1;
-  let validEnv = isValid ? wantedEnv : 'dev';
-  let config = require(path.join(__dirname, 'cfg/' + validEnv));
-  return config;
-}
-
-module.exports = buildConfig(env);
+module.exports = {
+	devtool: 'eval',
+	entry: [
+		//	'babel-polyfill',
+		'webpack-dev-server/client?http://localhost:3000',
+		'webpack/hot/only-dev-server',
+		'./src/index'
+	],
+	output: {
+		path: path.join(__dirname, 'dist'),
+		filename: 'bundle.js',
+		publicPath: '/static/'
+	},
+	plugins: [
+		new webpack.HotModuleReplacementPlugin()
+	],
+	module: {
+		loaders: [
+			{
+				test: /\.js$/,
+				loaders: ['react-hot', 'babel'],
+				include: path.join(__dirname, 'src')
+			},
+			{
+                test: /\.scss$/,
+                include: /src/,
+				loader: "style-loader!css-loader!postcss-loader"
+            },
+		]
+	},
+    postcss: function () {
+        return [postcssmixins, stripInlineComments, precss, postcssColorAlpha, autoprefixer];
+    }
+};

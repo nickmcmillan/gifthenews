@@ -1,15 +1,13 @@
 $timing: 600ms;
 $ease: cubic-bezier(0.72,-0.39, 0, 1.07);
 
-@mixin textblock($fatness: 0.1em, $overhang: 0.2em, $color: #fff) {
+@define-mixin textblock $fatness: 0.1em, $overhang: 0.2em, $color: #fff {
     display: inline;
     box-shadow: $overhang 0 0 $color, -$overhang 0 0 $color;
     background-color: $color;
 }
 
-
 .card {
-  // height: 100%;
   position: absolute;
   top: 0;
   right: 0;
@@ -24,7 +22,6 @@ $ease: cubic-bezier(0.72,-0.39, 0, 1.07);
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
-
   transition: opacity $timing ease-in;
 }
 
@@ -45,8 +42,7 @@ $ease: cubic-bezier(0.72,-0.39, 0, 1.07);
   font-weight: 700;
   font-size: 8vmin;
   color: #000;
-  @include textblock(0.5em, 15px, transparentize(#fff, 0.1));
-  background-color: transparentize(#fff, 0.1);
+  @mixin textblock 0.5em, 15px, #fff.9;
 }
 
 .card__h1-wrapper,
@@ -65,10 +61,8 @@ $ease: cubic-bezier(0.72,-0.39, 0, 1.07);
   font-weight: 300;
   font-size: 5vmin;
   margin: 0;
-
   color: #fff;
-  @include textblock(0.5em, 15px, transparentize(#1a1a1a, 0.15));
-  background-color: transparentize(#1a1a1a, 0.15);
+  @mixin textblock 0.5em, 15px, #1a1a1a.85;
 }
 
 .card__h1,
@@ -96,8 +90,6 @@ $ease: cubic-bezier(0.72,-0.39, 0, 1.07);
   .card__h1-wrapper,
   .card__summary-wrapper {
     transform: translate3d(30%, 0, 0);
-
-
   }
 }
 
