@@ -20,7 +20,7 @@ export default class App extends Component {
 			itemCount: 0,
 			rating: 'y',
 			delay: 10000,
-			newsFeed: 'http://feeds.reuters.com/reuters/technologyNews'
+			feed: 'http://feeds.reuters.com/reuters/technologyNews'
 		}
 	}
 
@@ -81,7 +81,10 @@ export default class App extends Component {
 		// you can set the Giphy filter using a query string paramater, otherwise it default to 'g'.
 		// example: /?rating=g
 
+		// you can set a custom RSS news feed using 'feed='
+
 		this.setState({
+			feed: getQuery('feed') ? getQuery('feed') : this.state.feed,
 			rating: getQuery('rating') ? getQuery('rating') : 'g'
 		})
 
@@ -90,7 +93,7 @@ export default class App extends Component {
 
 	componentDidMount() {
 
-		getNews(this.state.newsFeed)
+		getNews(this.state.feed)
 			.then(response => mapGifs(this, response))
 			.then(response => this._startInterval(response)),
 
@@ -124,6 +127,7 @@ export default class App extends Component {
 						gif={this.state.currentItem.gif}
 						rating={this.state.rating}
 						debug={this.state.debug}
+						feed={this.state.feed}
 					/>
 					<img className='giphy-logo' src={giphyImg} alt='Powered by Giphy logo' / >
 				</div>

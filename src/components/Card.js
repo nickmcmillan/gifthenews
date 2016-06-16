@@ -29,6 +29,7 @@ export default class Card extends React.Component {
 		    </ReactCSSTransitionGroup>
 
 			<div className={'debug ' + (this.props.debug ? 'show' : 'hide')}>
+				<p>Feed: {this.props.feed}</p>
 				<p>Keywords:</p>
 				<ul>
 					{this.props.keywords.map(function(value) {

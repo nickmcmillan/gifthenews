@@ -28,9 +28,9 @@ module.exports = {
 		new webpack.optimize.DedupePlugin(),
 		new webpack.optimize.UglifyJsPlugin(),
 		new webpack.optimize.AggressiveMergingPlugin(),
-		// there is no HTML file!!
 		new HtmlWebpackPlugin({
 			title: 'GIF the News',
+			template: './src/index.ejs',
 			filename: 'index.html'
 		})
 	]
