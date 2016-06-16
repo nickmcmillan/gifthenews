@@ -19,8 +19,8 @@ export default function(feed) {
 				  data.items.map(i => {
 
 					  let title = i.title
-					  let description = stripUntilDash(stripHTML(i.description))
-					  let keywords = keywordFinder(title + description)
+					  let description = stripHTML(i.description) // wrap this strip until dash if needed
+					  let keywords = keywordFinder(title) // or title + description if you want more words to analyse
 
 					  cleanedData.push({
 						  title,

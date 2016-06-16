@@ -18,7 +18,7 @@ export default class App extends Component {
 			index: 0,
 			currentItem: {},
 			itemCount: 0,
-			rating: 'y',
+			rating: 'g',
 			delay: 10000,
 			feed: 'http://feeds.reuters.com/reuters/technologyNews'
 		}
@@ -81,11 +81,11 @@ export default class App extends Component {
 		// you can set the Giphy filter using a query string paramater, otherwise it default to 'g'.
 		// example: /?rating=g
 
-		// you can set a custom RSS news feed using 'feed='
+		// you can also set a custom RSS news feed using 'feed='
 
 		this.setState({
-			feed: getQuery('feed') ? getQuery('feed') : this.state.feed,
-			rating: getQuery('rating') ? getQuery('rating') : 'g'
+			feed: getQuery('feed') ? getQuery('feed') : this.state.feed, // default to initial state
+			rating: getQuery('rating') ? getQuery('rating') : this.state.rating
 		})
 
 		this._toggleDebugDisplay()
