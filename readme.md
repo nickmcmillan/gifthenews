@@ -1,7 +1,7 @@
 # GIF the News
 
-To develop locally: ``npm run webpack``.
-To create a distribution version for deploying: ``npm run dist``
+To develop locally: ``npm run start``.
+To create a distribution version for deploying: ``npm run build``
 
 
 ### Authors:

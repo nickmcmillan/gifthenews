@@ -5,6 +5,7 @@ import getNews from './utilities/get-news'
 import mapGifs from './utilities/map-gifs'
 import getQuery from './utilities/get-query'
 import './css/App.scss'
+import giphyImg from './images/giphy.png'
 
 export default class App extends Component {
 
@@ -108,7 +109,7 @@ export default class App extends Component {
 						className="card"
 						title='Hang tight'
 					/>
-					<img className='giphy-logo' src='images/giphy.png' alt='Powered by Giphy logo' / >
+					<img className='giphy-logo' src={giphyImg} alt='Powered by Giphy logo' / >
 				</div>
 			);
 		} else {
@@ -124,7 +125,7 @@ export default class App extends Component {
 						rating={this.state.rating}
 						debug={this.state.debug}
 					/>
-					<img className='giphy-logo' src='images/giphy.png' alt='Powered by Giphy logo' / >
+					<img className='giphy-logo' src={giphyImg} alt='Powered by Giphy logo' / >
 				</div>
 			);
 		}
