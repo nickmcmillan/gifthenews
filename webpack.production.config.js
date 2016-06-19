@@ -25,11 +25,17 @@ module.exports = {
         return [postcssmixins, stripInlineComments, precss, postcssColorAlpha, autoprefixer];
     },
 	plugins: [
+		// need this guy to make react build the production version, instead of just minifying the dev version
+		new webpack.DefinePlugin({
+			'process.env': {
+				'NODE_ENV': JSON.stringify('production')
+			}
+		}),
 		new webpack.optimize.DedupePlugin(),
 		new webpack.optimize.UglifyJsPlugin(),
 		new webpack.optimize.AggressiveMergingPlugin(),
 		new HtmlWebpackPlugin({
-			title: 'GIF the News',
+			title: 'GIF The News',
 			template: './src/index.ejs',
 			filename: 'index.html'
 		})

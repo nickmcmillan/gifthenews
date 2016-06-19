@@ -24,7 +24,7 @@ module.exports = {
 	plugins: [
 		new webpack.HotModuleReplacementPlugin(),
 		new HtmlWebpackPlugin({
-			title: 'GIF the News',
+			title: 'GIF The News - development',
 			template: './src/index.ejs',
 			filename: 'index.html'
 		})

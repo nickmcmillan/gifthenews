@@ -1,9 +1,9 @@
+import 'whatwg-fetch';
 
 export default function(component, items) {
 
 	const giphyApi = 'http://api.giphy.com/v1/gifs'
 	const apiKey = 'dc6zaTOxFJmzC'
-
 
 	// create an array of promises
 	let promises = []

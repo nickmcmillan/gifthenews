@@ -1,6 +1,7 @@
 import keywordFinder from './keyword-finder'
 import stripHTML from './strip-html'
 import stripUntilDash from './strip-until-dash'
+import 'whatwg-fetch';
 
 export default function(feed) {
 

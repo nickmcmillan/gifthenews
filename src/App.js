@@ -19,8 +19,8 @@ export default class App extends Component {
 			currentItem: {},
 			itemCount: 0,
 			rating: 'g',
-			delay: 10000,
-			feed: 'http://feeds.reuters.com/reuters/technologyNews'
+			delay: 15000,
+			feed: 'http://www.news.com.au/technology/rss' // default feed
 		}
 	}
 
@@ -51,6 +51,12 @@ export default class App extends Component {
 		// keep 'this' within 'tick'
 		tick.apply(this)
 		setInterval(tick.bind(this), this.state.delay)
+
+
+		// refresh the browser without cache after 2 hours
+		setTimeout(() => {
+			document.location.reload(true)
+		}, 720000) // 2 hours
 
 	}
 
