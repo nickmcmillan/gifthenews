@@ -2,6 +2,8 @@
 
 Foyer installation app built with React which a) pulls in an RSS feed and cycles through articles and b) picks out the most frequently used words in the article in order to display a relevant GIF from Giphy.
 
+http://nick.computer/gif/
+
 ## Features
 * Ability to configure the news feed by adding a query string – it supports any RSS feed. Sort of. Some don’t work, it really depends on the news feed. Here’s an example that works;
  * `/?feed=http://feeds.reuters.com/reuters/entertainment`
