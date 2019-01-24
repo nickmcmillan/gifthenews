@@ -37,7 +37,7 @@ export default class Card extends React.Component {
 					})}
 				</ul>
 				<p>Giphy filter: {this.props.rating} <br/> Use query string to set - eg '/?rating=pg-13'<br/>
-				Same deal with '?feed=http://whatever.com/rss'</p>
+				Same deal with '?feed=https://whatever.com/rss'</p>
 			</div>
 
 

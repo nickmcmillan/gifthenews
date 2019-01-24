@@ -20,7 +20,7 @@ export default class App extends Component {
 			itemCount: 0,
 			rating: 'g',
 			delay: 15000,
-			feed: 'http://www.news.com.au/technology/rss' // default feed
+			feed: 'https://www.news.com.au/technology/rss' // default feed
 		}
 	}
 
