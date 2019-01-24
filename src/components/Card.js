@@ -25,7 +25,7 @@ export default class Card extends React.Component {
 		      </div>
 		    </ReactCSSTransitionGroup>
 		    <ReactCSSTransitionGroup transitionName="video" transitionEnterTimeout={1000} transitionLeaveTimeout={1000} >
-		      <video className="card__video" src={this.props.gif} loop autoPlay key={key}></video>
+          <video className="card__video" src={this.props.gif} loop muted autoPlay playsInline webkitPlaysInline key={key} />
 		    </ReactCSSTransitionGroup>
 
 			<div className={'debug ' + (this.props.debug ? 'show' : 'hide')}>

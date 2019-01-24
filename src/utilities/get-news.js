@@ -9,7 +9,7 @@ export default function(feed) {
 	return new Promise(function(resolve, reject) {
 
 		try {
-			const rss2json = 'http://rss2json.com/api.json?rss_url'
+			const rss2json = 'https://rss2json.com/api.json?rss_url'
 			const url = `${rss2json}=${feed}`
 
 			fetch(url).then(r => r.json())
